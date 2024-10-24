@@ -125,4 +125,21 @@ input_list = [1, 1, 2]
 unique_permutations = generate_unique_permutations(input_list)
 print(unique_permutations)
 
+import re
+
+def find_all_dates(text):
+    # Define a regex pattern for the specified date formats
+    pattern = r'(\d{2}-\d{2}-\d{4}|\d{2}/\d{2}/\d{4}|\d{4}\.\d{2}\.\d{2})'
+    
+    # Use re.findall to find all matches of the pattern in the input text
+    dates = re.findall(pattern, text)
+    
+    return dates
+
+# Example usage
+text = "I was born on 23-08-1994, my friend on 08/23/1994, and another one on 1994.08.23."
+found_dates = find_all_dates(text)
+print(found_dates)
+
+
 
