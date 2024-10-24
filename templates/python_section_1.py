@@ -141,5 +141,28 @@ text = "I was born on 23-08-1994, my friend on 08/23/1994, and another one on 19
 found_dates = find_all_dates(text)
 print(found_dates)
 
+def rotate_matrix(matrix):
+    n = len(matrix)
+    
+    # Step 1: Rotate the matrix by 90 degrees clockwise
+    rotated_matrix = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            rotated_matrix[j][n - 1 - i] = matrix[i][j]
+
+    # Step 2: Replace each element with the sum of its row and column, excluding itself
+    final_matrix = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            row_sum = sum(rotated_matrix[i])
+            col_sum = sum(rotated_matrix[k][j] for k in range(n))
+            final_matrix[i][j] = row_sum + col_sum - rotated_matrix[i][j]  # Exclude itself
+
+    return final_matrix
+
+# Example usage
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+result = rotate_matrix(matrix)
+print(result)
 
 
