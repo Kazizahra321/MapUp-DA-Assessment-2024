@@ -41,3 +41,52 @@ print(group_strings_by_length(["apple", "bat", "car", "elephant", "dog", "bear"]
 
 print(group_strings_by_length(["one", "two", "three", "four"]))
 # Output: {3: ['one', 'two'], 4: ['four'], 5: ['three']}
+
+def flatten_dict(nested_dict, parent_key='', sep='.'):
+    items = {}
+
+    for key, value in nested_dict.items():
+        # Create a new key by appending the parent key and current key
+        new_key = f"{parent_key}{sep}{key}" if parent_key else key
+        
+        if isinstance(value, dict):
+            # If the value is a dictionary, recurse into it
+            items.update(flatten_dict(value, new_key, sep=sep))
+        elif isinstance(value, list):
+            # If the value is a list, iterate through it
+            for i, item in enumerate(value):
+                # Create new key for each index
+                index_key = f"{new_key}[{i}]"
+                if isinstance(item, dict):
+                    # Recurse into the dictionary if the item is a dictionary
+                    items.update(flatten_dict(item, index_key, sep=sep))
+                else:
+                    # Otherwise, set the value directly
+                    items[index_key] = item
+        else:
+            # For any other type, set the value directly
+            items[new_key] = value
+    
+    return items
+
+# Example usage:
+nested_dict = {
+    "road": {
+        "name": "Highway 1",
+        "length": 350,
+        "sections": [
+            {
+                "id": 1,
+                "condition": {
+                    "pavement": "good",
+                    "traffic": "moderate"
+                }
+            }
+        ]
+    }
+}
+
+flattened_dict = flatten_dict(nested_dict)
+print(flattened_dict)
+
+
