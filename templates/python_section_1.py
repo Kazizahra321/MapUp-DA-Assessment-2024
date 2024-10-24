@@ -165,4 +165,27 @@ matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 result = rotate_matrix(matrix)
 print(result)
 
+import pandas as pd
+
+def check_time_coverage(df):
+    # Convert timestamp columns to datetime
+    df['start'] = pd.to_datetime(df['startDay'] + ' ' + df['startTime'])
+    df['end'] = pd.to_datetime(df['endDay'] + ' ' + df['endTime'])
+    
+    # Group by (id, id_2)
+    grouped = df.groupby(['id', 'id_2'])
+    
+    # Check if each group covers all days and 24 hours
+    def coverage_check(group):
+        days_covered = set(group['start'].dt.dayofweek)
+        full_24_hours = (group['start'].min().time() <= pd.Timestamp('00:00:00').time() and
+                         group['end'].max().time() >= pd.Timestamp('23:59:59').time())
+        return not (len(days_covered) == 7 and full_24_hours)
+
+    return grouped.apply(coverage_check)
+
+# Example usage
+# df = pd.read_csv('dataset-1.csv')
+# incorrect_timestamps = check_time_coverage(df)
+# print(incorrect_timestamps)
 
