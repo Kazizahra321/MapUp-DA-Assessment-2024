@@ -88,5 +88,41 @@ nested_dict = {
 
 flattened_dict = flatten_dict(nested_dict)
 print(flattened_dict)
+def generate_unique_permutations(nums):
+    def backtrack(path, used):
+        # If the current path has the same length as the input list, we found a permutation
+        if len(path) == len(nums):
+            result.append(path[:])  # Append a copy of the current permutation to the result
+            return
+        
+        for i in range(len(nums)):
+            if used[i]:  # If the number is already used in the current permutation, skip it
+                continue
+            
+            # Skip duplicates: If the current number is the same as the previous one and the previous one was not used,
+            # it means we are at the same level of recursion with the same number, which is not allowed.
+            if i > 0 and nums[i] == nums[i - 1] and not used[i - 1]:
+                continue
+            
+            used[i] = True  # Mark the number as used
+            path.append(nums[i])  # Include the number in the current permutation
+            
+            backtrack(path, used)  # Recurse to generate permutations
+            
+            # Backtrack: Remove the last added number and mark it as unused
+            path.pop()
+            used[i] = False
+
+    nums.sort()  # Sort the input to handle duplicates
+    result = []
+    used = [False] * len(nums)  # Track whether a number is used in the current permutation
+    backtrack([], used)
+    
+    return result
+
+# Example usage
+input_list = [1, 1, 2]
+unique_permutations = generate_unique_permutations(input_list)
+print(unique_permutations)
 
 
